@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="5">
+    <meta http-equiv="refresh" content=".get">
+
+    <title>Document</title>
+    <link rel="stylesheet" href="./cssiot.css">
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-database.js"></script>
+
+</head>
+<body>
+    
+<div class="container">  
+    <div class="naslov">
+        <button class="button" id="sendOn" click="">Upali</button>
+        <button class="button" id="sendOff" click="">Ugasi</button>
+        <button class="button" id="sendAuto">Auto</button>
+        <button class="button" id="sendOn2" click="">Upali 2 puta</button>
+        <h1>Sistem za mjerenje vlage tla</h1>
+        <div class="get">
+            <h1 class="getStanjePumpe"></h1>
+            <h1  class="getNivoVode"></h1>
+            <h1 id="getNivoVode"></h1>
+        </div>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+  apiKey: "AIzaSyDf0fmBuRttuxS8Loo45tc0U2PZTn8JQjQ",
+  authDomain: "navodnjavanje---esp8266.firebaseapp.com",
+  databaseURL: "https://navodnjavanje---esp8266-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "navodnjavanje---esp8266",
+  storageBucket: "navodnjavanje---esp8266.firebasestorage.app",
+  messagingSenderId: "1094526518750",
+  appId: "1:1094526518750:web:adef822cdd003521d5894f",
+  measurementId: "G-GTNPS0MEEG"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+
+var firebaseRef = firebase.database().ref('test');
+document.querySelector("#sendOn").addEventListener('click',()=>{
+    firebase.database().ref('test/stanjePumpe').update({pumpa:"ON"});
+})
+
+document.querySelector("#sendOff").addEventListener('click',()=>{
+    firebase.database().ref('test/stanjePumpe').update({pumpa:"OFF"});
+})
+
+document.querySelector("#sendAuto").addEventListener('click', ()=>{
+  firebase.database().ref('test/stanjePumpe').update({pumpa:"AUTO"});
+});
+document.querySelector("#sendOn2").addEventListener('click', ()=>{
+  firebase.database().ref('test/stanjePumpe').update({pumpa:"ON2"});
+});
+
+firebase.database().ref('test/waterSensor').on("value", function(snapshot){
+    var element;
+    snapshot.forEach(element => {
+        const data = element.val();
+        if(data>=2 && data<=39){
+            document.querySelector('.getNivoVode').innerHTML =`<h3>Vlaga: ${data}  </h3> `
+           
+        }
+        else
+           document.querySelector('#getNivoVode').innerHTML =`<p>Vlaga:${data}</p> `
+
+    });
+})
+
+function f(x){
+
+
+}
+
+
+</script>
+
+</body>
+</html>
